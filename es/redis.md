@@ -27,7 +27,7 @@ Quiero agradecerle especialmente a [Perry Neal](https://twitter.com/perryneal) e
 La última versión del código fuente de este libro puede encontrarse en:
 <http://github.com/karlseguin/the-little-redis-book>
 
-# Introduction
+# Introducción
 
 En el último par de años, las técnicas y herramientas utilizadas para el almacenamiento y consulta de datos han crecido a un ritmo increíble. Es seguro afirmar que las bases de datos relacionales no van a ir a ninguna parte, del mismo modo que es posible decir que el ecosistema generado en torno a los datos nunca volverá a ser el mismo.
 
@@ -74,13 +74,13 @@ Puedes probar que todo funciona correctamente escribiendo `info` en la interfaz 
 
 Si tienes problemas con la configuración indicada anteriormente te sugiero que busques ayuda en el [grupo oficial de soporte de Redis](https://groups.google.com/forum/#!forum/redis-db).
 
-# Redis Drivers
+# Controladores para Redis
 
-As you'll soon learn, Redis' API is best described as an explicit set of functions. It has a very simple and procedural feel to it. This means that whether you are using the command line tool, or a driver for your favorite language, things are very similar. Therefore, you shouldn't have any problems following along if you prefer to work from a programming language. If you want, head over to the [client page](http://redis.io/clients) and download the appropriate driver.
+Como pronto aprenderás, la mejor manera de describir el API de Redis es como un conjunto explícito de funciones. Esto siginifica que cuando estás utilizando la línea de comandos, o un controlador para tu lenguaje favorito, las cosas se hacen de una manera muy similar. Por lo tanto, no deberías tener problemas si prefieres trabajar con Redis desde un lenguaje de programación. Si quieres, echa un vistazo a la [página de clientes](http://redis.io/clients) y descarga el controlador adecuado.
 
-# Chapter 1 - The Basics
+# Capítulo 1 - Los fundamentos
 
-What makes Redis special? What types of problems does it solve? What should developers watch out for when using it? Before we can answer any of these questions, we need to understand what Redis is.
+¿Qué hace a Redis especial?, ¿Qué tipos de problemas soluciona?, ¿Qué deberían esperar los desarrolladores cuando lo utilizan?. Antes de poder responder a estas preguntas, necesitamos entender qué es Redis.
 
 Redis is often described as an in-memory persistent key-value store. I don't think that's an accurate description. Redis does hold all the data in memory (more on this in a bit), and it does write that out to disk for persistence, but it's much more than a simple key-value store. It's important to step beyond this misconception otherwise your perspective of Redis and the problems it solves will be too narrow.
 
