@@ -164,25 +164,25 @@ Lo más importante que nos llevamos de este capítulo es que:
 
 * Estas características combinadas hacen que Redis sea rápido y fácil de usar, aunque no es válido para todos los escenarios posibles.
 
-# Chapter 2 - The Data Structures
+# Capítulo 2 - Las Estructuras de Datos
 
-It's time to look at Redis' five data structures. We'll explain what each data structure is, what methods are available and what type of feature/data you'd use it for.
+Es el momento de echar un vistazo a las cinco estructuras de datos de Redis. Vamos a explicar qué es cada estructura de datos, qué métodos están disponibles y para qué tipo de funcionalidad/datos lo puedes utilizar.
 
-The only Redis constructs we've seen so far are commands, keys and values. So far, nothing about data structures has been concrete. When we used the `set` command, how did Redis know what data structure to use? It turns out that every command is specific to a data structure. For example when you use `set` you are storing the value in a string data structure. When you use `hset` you are storing it in a hash. Given the small size of Redis' vocabulary, it's quite manageable.
+Los únicos elementos que hemos visto hasta ahora son comandos, claves y valores. Hasta ahora, no hemos concretado nada acerca de las estructuras de datos. Cuando empleábamos el comando `set`, ¿Cómo sabía Redis qué tipo de datos debía utilizar? Cada comando es específico para cada estructura de datos. Por ejemplo, cuando utilizas el comando `set` estás almacenando el valor en una estrucutura de cadenas de texto. Cuando utilizas `hset` lo esás almacenando en una tabla hash. Dado el pequeño tamaño del vocabulario de Redis, es muy manejable.
 
-**[Redis' website](http://redis.io/commands) has great reference documentation. There's no point in repeating the work they've already done. We'll only cover the most important commands needed to understand the purpose of a data structure.**
+**[La web de Redis](http://redis.io/commands) tiene una magnífica documentación de referencia. No hay motivo por el cual repetir el trabajo que ellos ya han realizado. Nosotros sólo cubriremos los comandos mśa importantes para poder entender el propósito de la estructura de datos.**
 
-There's nothing more important than having fun and trying things out. You can always erase all the values in your database by entering `flushdb`, so don't be shy and try doing crazy things!
+No hay nada más importante que divertirse y probar cosas. Siempre podrás dejar la base de datos en su estado original con el comando `flushdb`, ¡así que no seas tímido y haz locuras!
 
-## Strings
+## Cadenas de texto
 
-Strings are the most basic data structures available in Redis. When you think of a key-value pair, you are thinking of strings. Don't get mixed up by the name, as always, your value can be anything. I prefer to call them "scalars", but maybe that's just me.
+Las cadenas de texto son las estructuras de datos más básicas disponibles en Redis. Cuando piensas en un par clave-valor, estás pensando en cadenas de texto. Independientemente al nombre de la clave, el valor puede ser cualquier cosa. Yo prefiero llamarlos "escalares", pero es simplemente una preferencia personal.
 
-We already saw a common use-case for strings, storing instances of objects by key. This is something that you'll make heavy use of:
+Ya hemos visto un caso de uso común de empleo de cadenas de texto, almacenando instancias de objetos por clave. Esto es algo de lo que harás mucho uso:
 
 	set users:leto "{name: leto, planet: dune, likes: [spice]}"
 
-Additionally, Redis lets you do some common operations. For example `strlen <key>` can be used to get the length of a key's value; `getrange <key> <start> <end>` returns the specified range of a value; `append <key> <value>` appends the value to the existing value (or creates it if it doesn't exist already). Go ahead and try those out. This is what I get:
+Adicionalmente, Redis te permite realizar algunas operaciones comunes. Por ejemplo, se puede utilizar `strlen <key>` para calcular la longitud del valor de la clave; `getrange <key> <start> <end>` revuelve la subcadena de texto en el rango indicado; `append <key> <value>` añade el valor al final del valor existente (o crea uno si no existe ninguno todavía). Vamos un paso más allá a probar esto. Esto es lo que obtendremos:
 
 	> strlen users:leto
 	(integer) 42
@@ -193,9 +193,9 @@ Additionally, Redis lets you do some common operations. For example `strlen <key
 	> append users:leto " OVER 9000!!"
 	(integer) 54
 
-Now, you might be thinking, that's great, but it doesn't make sense. You can't meaningfully pull a range out of JSON or append a value. You are right, the lesson here is that some of the commands, especially with the string data structure, only make sense given specific type of data.
+Ahora puede que estés pensando, esto es estupendo, pero no tiene sentido. No tiene sentido mirar en un rango específico de un objeto JSON o añadir un valor. Tienes razón, la lección trata de enseñar que algunos comandos, especialmente al tratar con cadenas de texto, y sólo tienen sentido en tipos de datos específicos.
 
-Earlier we learnt that Redis doesn't care about your values. Most of the time that's true. However, a few string commands are specific to some types or structure of values. As a vague example, I could see the above `append` and `getrange` commands being useful in some custom space-efficient serialization. As a more concrete example I give you the `incr`, `incrby`, `decr` and `decrby` commands. These increment or decrement the value of a string:
+Anteriormente aprendimos que Redis no tiene en cuenta los valores. La mayoría del tiempo esto es cierto. Sin embargo, unos pocos comandos con cadenas de texto son específicos para algunos tipos o estructuras de valores. Por ejemplo, existen los comandos `incr`, `incrby`, `decr` y `decrby`, los cuales incrementan o decrementan el valor de una cadena de texto:
 
 	> incr stats:page:about
 	(integer) 1
@@ -207,20 +207,22 @@ Earlier we learnt that Redis doesn't care about your values. Most of the time th
 	> incrby ratings:video:12333 3
 	(integer) 8
 
-As you can imagine, Redis strings are great for analytics. Try incrementing `users:leto` (a non-integer value) and see what happens (you should get an error).
+Como puedes imaginar, las cadenas de texto de Redis son muy buenas para análisis. Prueba a incrementar `users:leto` (un valor no entero) y verás qué ocurre (deberías ver un error).
 
-A more advanced example is the `setbit` and `getbit` commands. There's a [wonderful post](http://blog.getspool.com/2011/11/29/fast-easy-realtime-metrics-using-redis-bitmaps/) on how Spool uses these two commands to efficiently answer the question "how many unique visitors did we have today". For 128 million users a laptop generates the answer in less than 50ms and takes only 16MB of memory.
+Hay un ejemplo más avanzado con los comandos `setbit` y `getbit`. Hay una [entrada maravillosa](http://blog.getspool.com/2011/11/29/fast-easy-realtime-metrics-using-redis-bitmaps/) de cómo Spool utiliza estos dos comandos para, de una forma efectiva, responder a la pregunta "¿cuántos usuarios únicos tuvimos hoy?". Para 128 millones de usuarios, un portátil convencional devuelve la respuesta en menos de 50ms utilizando sólo 16MB de memoria.
 
-It isn't important that you understand how bitmaps work, or how Spool uses them, but rather to understand that Redis strings are more powerful than they initially seem. Still, the most common cases are the ones we gave above: storing objects (complex or not) and counters. Also, since getting a value by key is so fast, strings are often used to cache data.
+No es importante entender cómo funcionan los mapas de bits, o cómo Spool los utiliza, sino entender que las cadenas de texto de Redis son más potentes de lo que pueden parecer a simple vista. Una vez más, los casos de uso más comunes son los que comentamos anteriormente: el almacenamiento de objetos (sean complejos o no) y los contadores. Además, puesto que recuperar un valor a través de su clave es tan rápido, las cadenas de texto se emplean a menudo para cachear datos.
 
 ## Hashes
 
-Hashes are a good example of why calling Redis a key-value store isn't quite accurate. You see, in a lot of ways, hashes are like strings. The important difference is that they provide an extra level of indirection: a field. Therefore, the hash equivalents of `set` and `get` are:
+Los hashes son un buen ejemplo de por qué no es acertado decir que Redis es un almacén clave-valor. Como posiblemente sepas, en cierta manera, los hashes son como las cadenas de texto. La diferencia más importante es que los hashes incluyen un nivel extra de indirección: un campo.
+
+En este caso, los equivalentes en hash de `set` y `get` son:
 
 	hset users:goku powerlevel 9000
 	hget users:goku powerlevel
 
-We can also set multiple fields at once, get multiple fields at once, get all fields and values, list all the fields or delete a specific field:
+Podemos dar valor a varios campos a la vez, obtener varios campos a la vez, recuperar todos los campos y sus valores, mostrar todos los campos o borrar un campo específico.
 
 	hmset users:goku race saiyan age 737
 	hmget users:goku race powerlevel
@@ -228,69 +230,67 @@ We can also set multiple fields at once, get multiple fields at once, get all fi
 	hkeys users:goku
 	hdel users:goku age
 
-As you can see, hashes give us a bit more control over plain strings. Rather than storing a user as a single serialized value, we could use a hash to get a more accurate representation. The benefit would be the ability to pull and update/delete specific pieces of data, without having to get or write the entire value.
+Como puedes ver, los hashes nos dan algo más de control de lo que nos daban las cadenas de texto. En lugar de almacenar un usuario como un valor serializado podemos almacenar un hash con una representación más acertada. El beneficio que se obtiene de ellos es el poder acceder y actualizar/borrar trozos concretos de datos sin tener que recuperar o escribir el valor entero.
 
-Looking at hashes from the perspective of a well-defined object, such as a user, is key to understanding how they work. And it's true that, for performance reasons, more granular control might be useful. However, in the next chapter we'll look at how hashes can be used to organize your data and make querying more practical. In my opinion, this is where hashes really shine.
+Mirando los hases desde la perspectiva de objetos bien definidos, como un usuario, es primordial entender cómo funcionan. Y es cierto que, por motivos de rendimiento, puede ser útil tener un control con un grano más fino. Sin embargo, en el próximo capítulo veremos cómo los datos pueden utiliazrse para organizar los datos y lanzar consultas de un modo más práctico. En mi opinión, este es el escenario en el que los hashes realmente brillan.
 
-## Lists
+## Listas
 
-Lists let you store and manipulate an array of values for a given key. You can add values to the list, get the first or last value and manipulate values at a given index. Lists maintain their order and have efficient index-based operations. We could have a `newusers` list which tracks the newest registered users to our site:
+Las listas permiten almacenar y manipular un conjunto de valores dada una clave concreta. Puedes añadir valores a la lista, recuperar el primer o el último valor y manipular valores de una posición concreta. Las listas mantienen un orden y son eficientes al realizar operaciones basadas en su índice. Podemos tener una lista llamada `newusers` en la que guardar los usuarios registrados más recientemente en nuestra web:
 
 	lpush newusers goku
 	ltrim newusers 0 49
 
-First we push a new user at the front of the list, then we trim it so that it only contains the last 50 users. This is a common pattern. `ltrim` is an O(N) operation, where N is the number of values we are removing. In this case, where we always trim after a single insert, it'll actually have a constant performance of O(1) (because N will always be equal to 1).
+En primer lugar colocamos un nuevo usuario en el comienzo de la lista, y después la truncamos para que sólo contenga a los últimos 50 usuarios. Este es un patrón común. `ltrim` es una operación con una complejidad O(N), donde N es el número de valores que estamos eliminando. En este caso, en el que estamos truncando tras insertar un único elemento, se obtiene un rendimiento constante de O(1) (porque N es siempre igual a 1).
 
-This is also the first time that we are seeing a value in one key referencing a value in another. If we wanted to get the details of the last 10 users, we'd do the following combination:
+Esta es además la primera vez que vamos a ver el valor de una clave referenciando el valor de otra. Si queremos recuperar los detalles de los últimos 10 usuarios, podemos hacer la siguiente combinación:
 
 	keys = redis.lrange('newusers', 0, 10)
 	redis.mget(*keys.map {|u| "users:#{u}"})
 
-The above is a bit of Ruby which shows the type of multiple roundtrips we talked about before.
+Por supuesto, las listas no son buenas únicamente para almacenar referencias a otras claves. Los valores pueden ser cualquier cosa. Puedes usar listas para almacenar logs o registrar el camino que está siguiendo un usuario a través de una aplicación. Si estás construyendo un juego puedes usarlo para registrar las acciones que realiza un usuario.
 
-Of course, lists aren't only good for storing references to other keys. The values can be anything. You could use lists to store logs or track the path a user is taking through a site. If you were building a game, you might use one to track a queued user actions.
+## Conjuntos
 
-## Sets
-
-Sets are used to store unique values and provide a number of set-based operations, like unions. Sets aren't ordered but they provide efficient value-based operations. A friend's list is the classic example of using a set:
+Los conjuntos se emplean para almacenar valores únicos y facilitan un número de operaciones útiles para tratar con ellos, como las uniones. Los conjuntos no mantienen orden pero brindan operaciones eficientes basándose en los valores. Una lista de amigos es el ejemplo clásico de uso de un conjunto.
 
 	sadd friends:leto ghanima paul chani jessica
 	sadd friends:duncan paul jessica alia
 
-Regardless of how many friends a user has, we can efficiently tell (O(1)) whether userX is a friend of userY or not:
+Independientemente de cuántos amigos tenga un usuario, podemos decir eficientemente (O(1)) cuándo un el usuarioX es amigo del usuarioY o no.
 
 	sismember friends:leto jessica
 	sismember friends:leto vladimir
 
-Furthermore we can see whether two or more people share the same friends:
+Es más, podemos saber cuándo dos o más personas tienen los mismos amigos:
 
 	sinter friends:leto friends:duncan
 
-and even store the result at a new key:
+E incluso almacenar el resultado en una nueva clave:
 
 	sinterstore friends:leto_duncan friends:leto friends:duncan
 
-Sets are great for tagging or tracking any other properties of a value for which duplicates don't make any sense (or where we want to apply set operations such as intersections and unions).
+Los conjuntos son muy buenos para etiquetar o registrar propiedades de un valor para los cuales los duplicados no tengan sentido (o para aquellos escenarios en los que queramos realizar operaciones como intersecciones o uniones).
 
-## Sorted Sets
+## Conjuntos Ordenados
 
-The last and most powerful data structure are sorted sets. If hashes are like strings but with fields, then sorted sets are like sets but with a score. The score provides sorting and ranking capabilities. If we wanted a ranked list of friends, we might do:
+La última y más poderosa estructura de datos son los conjuntos ordenados. Si los hashes son como las cadenas de texto pero con campos, entonces los conjuntos ordenados son como los conjuntos pero con una puntuación. La puntuación facilita la ordenación y la capacidad de establecer un ranking. Si queremos tener una lista de amigos con ranking, podemos hacer:
 
 	zadd friends:duncan 70 ghanima 95 paul 95 chani 75 jessica 1 vladimir
 
-Want to find out how many friends `duncan` has with a score of 90 or over?
+¿Cómo encontramos cuántos amigos tiene `duncan` con una puntuación de 90 o más?
 
 	zcount friends:duncan 90 100
 
-How about figuring out `chani`'s rank?
+¿Cómo podemos saber cuál es el ranking de `chani`?
 
 	zrevrank friends:duncan chani
 
-We use `zrevrank` instead of `zrank` since Redis' default sort is from low to high (but in this case we are ranking from high to low). The most obvious use-case for sorted sets is a leaderboard system. In reality though, anything you want sorted by an some integer, and be able to efficiently manipulate based on that score, might be a good fit for a sorted set.
+Utilizamos `zrevrank` en lugar de `zrank` desde que la ordenación por defecto de Redis ordena de menor a mayor valor (pero, en este caso, queremos ordenar de mayor a menor valor). El caso de uso más obvio para los conjuntos ordenados son los sistemas de clasificación. En realidad, cualquier cosa que quieras ordenar en base a un valor entero, y que sea capaz de ser manipulable eficientemente en base a su puntuación, puede encajar bien en un conjunto ordenado. 
 
-## In This Chapter
+## En este capítulo
 
-That's a high level overview of Redis' five data structures. One of the neat things about Redis is that you can often do more than you first realize. There are probably ways to use string and sorted sets that no one has thought of yet. As long as you understand the normal use-case though, you'll find Redis ideal for all types of problems. Also, just because Redis exposes five data structures and various methods, don't think you need to use all of them. It isn't uncommon to build a feature while only using a handful of commands.
+Hemos echado un vistazo general a las cinco estructuras de datos de Redis. Una de las mejores cosas de Redis es que puedes hacer más cosas de las que en un primer momento pensaste. Seguramente haya maneras de usar las cadenas de texto y los conjuntos que todavía no haya pensado nadie. A medida que vayas entendiendo los casos de uso habituales encontrarás a Redis perfecto para todo tipo de problemas. Además, aunque Redis exponga cinco estructuras de datos y varios métodos, no creas que vas a necesitar utilizar todos ellos. No es raro construir una nueva funcionalidad que utilice únicamente unos pocos comandos.
 
 # Chapter 3 - Leveraging Data Structures
 
