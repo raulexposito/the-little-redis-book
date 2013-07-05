@@ -1,7 +1,7 @@
 ## Acerca de ##
 The Little Redis Book es un libro introductorio gratuito de Redis.
 
-El libro fue escrito por [Karl Seguin](http://openmymind.net), con la asistencia de [Perry Neal](http://twitter.com/perryneal). La traducción ha sido realizada por [Raúl Expósito](http://raulexposito.com/)
+El libro fue escrito por [Karl Seguin](http://openmymind.net), con la asistencia de [Perry Neal](http://twitter.com/perryneal). La traducción ha sido realizada por [Raúl Expósito](http://raulexposito.com/).
 
 Si te gusta este libro, posiblemente también te guste [The Little MongoDB Book](http://openmymind.net/2011/3/28/The-Little-MongoDB-Book/).
 
@@ -9,7 +9,7 @@ Si te gusta este libro, posiblemente también te guste [The Little MongoDB Book]
 El libro puede ser distribuido libremente bajo la licencia [Attribution-NonCommercial 3.0 Unported](<http://creativecommons.org/licenses/by-nc/3.0/legalcode>).
 
 ## Traducciones ##
-* [Inglés](https://github.com/karlseguin/the-little-redis-book)
+* [Inglés](https://github.com/karlseguin/the-little-redis-book) - Versión original.
 * [Ruso](https://github.com/kondratovich/the-little-redis-book)
 * [Italiano](https://github.com/sandroconforto/the-little-redis-book) - [pdf](https://github.com/sandroconforto/the-little-redis-book/raw/master/book/redisIt.pdf)
 * [Chino](https://github.com/JasonLai256/the-little-redis-book)
@@ -68,7 +68,7 @@ Debes tener [KindleGen](http://www.amazon.com/gp/feature.html?ie=UTF8&docId=1000
 
 #### Construcción
 
-Ejecuta `make en/redis.mobi`.
+Ejecuta `make es/redis.mobi`.
 
 ## Imagen del título ##
 Se incluye un PSD de la imagen del título. La fuente utilizada es [Comfortaa](http://www.dafont.com/comfortaa.font).
