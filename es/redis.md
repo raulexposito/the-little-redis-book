@@ -2,9 +2,9 @@
 
 ## Licencia
 
-El Pequeño Libro de Redis posee una licencia Attribution-NonCommercial 3.0 Unported. No deberías haber pagado por este libro.
+El Pequeño Libro de Redis (The Little Redis Book) posee una licencia Attribution-NonCommercial 3.0 Unported. No deberías haber pagado por este libro.
 
-Eres libre de copiar, distribuir, modificar o mostrar el libro. Sin embargo, te pido que siempre me atribuyas la autoría del libro a mí, Karl Seguin, y que no lo utilices con fines comerciales.
+Eres libre de copiar, distribuir, modificar o mostrar el libro. Sin embargo, te pido que siempre me atribuyas la autoría del libro a mí, Karl Seguin, y al traductor, Raúl Expósito, y que no lo utilices con fines comerciales.
 
 Puedes leer el *texto completo* de **la licencia en**:
 
@@ -18,6 +18,10 @@ Karl escribió [El Pequeño Libro de MongoDB](http://openmymind.net/2011/3/28/Th
 
 Puede encontrase su blog en <http://openmymind.net> y twittea vía [@karlseguin](http://twitter.com/karlseguin)
 
+## Sobre El Traductor
+
+Este libro ha sido traducido por Raúl Expósito. Puedes visitar su página web en [http://raulexposito.com/](http://raulexposito.com/)
+
 ## Agradecimientos
 
 Quiero agradecerle especialmente a [Perry Neal](https://twitter.com/perryneal) el haberme prestado su visión, su mentalidad y su pasión. Me brindaste una ayuda que no tiene precio. Gracias.
@@ -25,7 +29,7 @@ Quiero agradecerle especialmente a [Perry Neal](https://twitter.com/perryneal) e
 ## Última versión
 
 La última versión del código fuente de este libro puede encontrarse en:
-<http://github.com/karlseguin/the-little-redis-book>
+<http://github.com/raulexposito/the-little-redis-book>
 
 # Introducción
 
