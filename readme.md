@@ -5,6 +5,8 @@ El libro fue escrito por [Karl Seguin](http://openmymind.net), con la asistencia
 
 Si te gusta este libro, posiblemente también te guste [The Little MongoDB Book](http://openmymind.net/2011/3/28/The-Little-MongoDB-Book/).
 
+[Descarga el libro en PDF](https://github.com/raulexposito/the-little-redis-book/blob/master/es/redis.pdf)
+
 ## Licencia ##
 El libro puede ser distribuido libremente bajo la licencia [Attribution-NonCommercial 3.0 Unported](<http://creativecommons.org/licenses/by-nc/3.0/legalcode>).
 
