@@ -249,8 +249,8 @@ En primer lugar colocamos un nuevo usuario en el comienzo de la lista, y despué
 
 Esta es además la primera vez que vamos a ver el valor de una clave referenciando el valor de otra. Si queremos recuperar los detalles de los últimos 10 usuarios, podemos hacer la siguiente combinación:
 
-	keys = redis.lrange('newusers', 0, 10)
-	redis.mget(*keys.map {|u| "users:#{u}"})
+	ids = redis.lrange('newusers', 0, 10)
+	redis.mget(*ids.map {|u| "users:#{u}"})
 
 Por supuesto, las listas no son buenas únicamente para almacenar referencias a otras claves. Los valores pueden ser cualquier cosa. Puedes usar listas para almacenar trazas de log o registrar el camino que está siguiendo un usuario a través de una aplicación. Si estás construyendo un juego puedes usarlo para registrar las acciones que realiza un usuario.
 
