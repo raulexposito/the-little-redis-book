@@ -29,7 +29,7 @@ es/redis.epub: es/title.png es/title.txt es/redis.md
 en/redis.mobi: en/redis.epub
 	$(MOBI_BUILDER) $^
 
-es/redis.mobi: en/redis.epub
+es/redis.mobi: es/redis.epub
 	$(MOBI_BUILDER) $^
 
 clean:

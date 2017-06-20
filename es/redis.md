@@ -106,7 +106,7 @@ En Redis, las bases de datos están identificadas simplemente con un número, si
 
 Aunque Redis es más que simplemente un almacén de conjuntos clave-valor, en su núcleo, cada una de las cinco estructuras de datos de Redis tiene al menos una clave y un valor. Es indispensable que entendamos los conceptos de clave y valor antes de continuar con el resto de elementos de información.
 
-Las claves son lo que vamos a utilizar para identificar conjuntos de datos. Vamos a tratar mucho con claves, pero por ahora, es suficiente con saber que una clave tiene un aspecto similar a `users:leto`. Uno podría esperar razonablemente que una clave como esta contuviese información sobre un usuario llamado `leto`. La coma no tiene ningún significado en especial, pero en lo relativo a Redis, es utilizado como un separador común para organizar las claves.
+Las claves son lo que vamos a utilizar para identificar conjuntos de datos. Vamos a tratar mucho con claves, pero por ahora, es suficiente con saber que una clave tiene un aspecto similar a `users:leto`. Uno podría esperar razonablemente que una clave como esta contuviese información sobre un usuario llamado `leto`. Los dos puntos no tienen ningún significado en especial, pero en lo relativo a Redis, es utilizado como un separador común para organizar las claves.
 
 Los valores representan los datos que se encuentran relacionados con la clave. Pueden ser cualquier cosa. A veces almacenarás cadenas de texto, a veces números enteros, a veces almacenarás objetos serializados (como JSON, XML, o cualquier otro formato). La mayor parte de las veces Redis tratará los valores como arrays de bytes y no se preocupará de su tipo. Hay que tener en cuenta que los distintos controladores gestionan la serialización de modos distintos (algunos te la dejarán a tí) de tal modo que en este libro sólo hablaremos de cadenas de texto, números enteros y objetos JSON.
 
@@ -290,7 +290,7 @@ La última y más poderosa estructura de datos son los conjuntos ordenados. Si l
 
 	zrevrank friends:duncan chani
 
-Utilizamos `zrevrank` en lugar de `zrank` porque la ordenación por defecto de Redis ordena de menor a mayor valor (pero, en este caso, queremos ordenar de mayor a menor valor). El caso de uso más obvio para los conjuntos ordenados son los sistemas de clasificación. En realidad, cualquier cosa que quieras ordenar en base a un valor entero, y que sea capaz de ser manipulable eficientemente en base a su puntuación, puede encajar bien en un conjunto ordenado. 
+Utilizamos `zrevrank` en lugar de `zrank` porque la ordenación por defecto de Redis ordena de menor a mayor valor (pero, en este caso, queremos ordenar de mayor a menor valor). El caso de uso más obvio para los conjuntos ordenados son los sistemas de clasificación. En realidad, cualquier cosa que quieras ordenar en base a un valor entero, y que sea capaz de ser manipulable eficientemente en base a su puntuación, puede encajar bien en un conjunto ordenado.
 
 ## En Este Capítulo
 
@@ -627,7 +627,7 @@ El código anterior recupera los detalles de todos los amigos masculinos de Leto
 Si eres nuevo en Lua deberías revisar cada línea con cuidado. Puede que te resulte útil saber que `{}` crea una `table` vacía (que puede actuar como array o como diccionario), `#TABLE` recupera el número de elementos que hay en TABLE, y `..` se utiliza para concatenar cadenas de texto.
 
 `eval` recibe cuatro parámetros. El segundo parámetro debería ser el número de claves; sin embargo el driver de Ruby automáticamete lo crea por nosotros. ¿Por qué es necesario? Observa cómo se ve lo anterior cuando se ejecuta desde la línea de comandos:
-  
+
     eval "....." "friends:leto" "m"
     vs
     eval "....." 1 "friends:leto" "m"
@@ -635,7 +635,7 @@ Si eres nuevo en Lua deberías revisar cada línea con cuidado. Puede que te res
 En el primer e incorrecto caso, ¿cómo sabe Redis cuáles de los parámetros son claves y cuáles simplemente son argumentos?. En el segundo caso no hay ambigüedad.
 
 Esto nos genera una segunda pregunta: ¿por qué hay que indicar explícitamente las claves? Cada comando de Redis conoce, en tiempo de ejecución, qué claves va a necesitar. Esto permitirá a futuras herramientas, como Redis Cluster, distribuir peticiones entre varios servidores de Redes. Es posible que vayas visto que nuestro ejemplo anterior recupere las claves dinámicamente (sin tener que pasárselas a `eval`). Un `hget` es ejecutado sobre todos los amigos masculinos de Leto. Esto es así porque la necesidad de listar las claves antes de tiempo es más una sugerencia que una regla a seguir. El código anterior funcionará en una única instancia, incluso aunque esta tenga replicación, pero no funcionará en el no-todavía-liberado Redis Cluster.
- 
+
 ## Gestión de Scripts
 
 Aunque los scripts son cacheados por Redis cuando se ejecutan a través de `eval`, no es buena idea enviar el cuerpo del script cada vez que lo quieres ejecutar. En su lugar, puedes registrar el script en Redis y ejecutarlo por su clave. Para lograr esto puedes usar el comando `script load`, el cual devuelve el SHA1 del script:
@@ -723,7 +723,7 @@ Cuando comienzas con Redis puede que te preguntes "¿cuántas claves puedo tener
 
 Redis tiene soporte para replicación, en el sentido de que cuando escribes en una instancia de Redis (el maestro), una o más instancias (los esclavos) se mantienen actualizados con respecto al maestro. Para configurar un esclavo puedes usar o la variable de configuración `slaveof` o el comando `slaveof` (las instancias que se ejecuten sin esta configuración son o pueden ser maestros).
 
-La replicación te ayuda a proteger tus datos copiándolos a distintos servidores. La replicación puede utilizarse, además, para mejorar el rendimiento ya que las lecturas pueden ser realizadas por los esclavos. Pueden responder con datos ligeramente desactualizados, pero para la mayoría de las aplicaciones merece la pena. 
+La replicación te ayuda a proteger tus datos copiándolos a distintos servidores. La replicación puede utilizarse, además, para mejorar el rendimiento ya que las lecturas pueden ser realizadas por los esclavos. Pueden responder con datos ligeramente desactualizados, pero para la mayoría de las aplicaciones merece la pena.
 
 Desafortunadamente, la replicación de Redis no tiene recuperación automática ante caídas. Si el maestro cae, un esclavo necesita ser promocionado manualmente. Necesitarás de herramientas que provean alta disponibilidad y de scripts que automaticen este cambio para conseguir cierto grado de alta disponibilidad con Redis.
 
